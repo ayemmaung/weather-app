@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@assets/*": ["assets/*"],
+      "@layout/*": ["layout/*"],
+      "@components/*": ["components/*"],
+      "@ui/*": ["ui/*"],
+      "@types/*": ["types/*"]
+    },
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}

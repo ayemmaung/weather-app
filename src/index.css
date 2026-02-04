@@ -1,0 +1,403 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --mobile-breakpoint: 375px;
+  --tablet-breakpoint: 768px;
+  --desktop-breakpoint: 1440px;
+
+  --bg-color: hsl(243, 96%, 9%);
+  --neutral-800: hsl(243, 27%, 20%);
+  --neutral-700: hsl(243, 23%, 24%);
+  --neutral-600: hsl(243, 23%, 30%);
+  --neutral-300: hsl(240, 6%, 70%);
+  --neutral-200: hsl(250, 6%, 84%);
+  --white-color: hsl(0, 0%, 100%);
+  --orange-500: hsl(28, 100%, 52%);
+  --blue-500: hsl(233, 67%, 56%);
+  --blue-700: hsl(248, 70%, 36%);
+
+  --font-size: 18px;
+  --font-style-main: "DM Sans", sans-serif;
+  --font-style-secondary: "Bricolage Grotesque", sans-serif;
+}
+
+@theme {
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+}
+
+.main-title {
+  font-family: var(--font-style-secondary);
+  @apply text-5xl text-center;
+  @apply font-bold;
+  @apply text-(--white-color);
+  @apply px-6;
+}
+
+.sub-title {
+  @apply font-medium;
+  @apply text-(--white-color);
+  @apply text-lg;
+}
+
+.card-container {
+  @apply w-full;
+  @apply p-4 md:p-6;
+  @apply rounded-lg;
+  @apply bg-(--neutral-800) border border-(--neutral-600);
+  @apply bg-no-repeat bg-cover bg-center;
+}
+
+.card-label {
+  @apply text-(--neutral-300);
+  @apply font-medium;
+  @apply text-sm;
+}
+
+.card-value {
+  @apply text-(--neutral-200);
+  @apply text-4xl;
+  @apply font-light;
+}
+
+.main-container {
+  @apply px-3 pb-3 md:px-6 md:pb-6 lg:px-12 lg:pb-12;
+  @apply min-h-screen @lg:max-h-screen;
+  @apply flex flex-col;
+  @apply gap-3;
+}
+
+.header {
+  @apply py-3 sm:py-4 md:py-6;
+  @apply flex items-center justify-between;
+}
+
+main {
+  @apply grow;
+  @apply flex flex-col;
+  @apply gap-6 md:gap-12;
+}
+
+.body {
+  @apply grow;
+  @apply flex flex-col md:flex-row md:justify-between;
+  @apply gap-4 md:gap-6;
+}
+
+.left-side {
+  @apply flex flex-col gap-6;
+  @apply md:w-3/4;
+}
+
+.right-side {
+  @apply flex flex-col gap-6;
+  @apply md:w-1/4;
+}
+
+/* //? .left-side children styles starts */
+
+.today-weather-section {
+  @apply flex flex-col justify-center gap-3 md:gap-4 lg:gap-6;
+}
+
+.today-weather-overview {
+  @apply w-full;
+}
+
+.today-weather-details {
+  @apply grid grid-cols-2 grid-rows-2 gap-3 md:grid-cols-4 md:grid-rows-1 md:gap-4 lg:gap-6;
+}
+
+.daily-forecast-section {
+  @apply flex flex-col;
+  @apply gap-2 md:gap-3 lg:gap-5;
+}
+
+.daily-forecast-cards-container {
+  @apply grid grid-cols-3 gap-3 md:grid-cols-4 md:gap-4 lg:grid-cols-7 lg:gap-6;
+}
+
+.today-weather-overview-card {
+  @apply h-67 sm:w-full;
+  @apply flex flex-col gap-3 md:flex-row md:items-center md:justify-between;
+  @apply px-6 py-12 md:p-8;
+  @apply rounded-4xl md:rounded-[40px];
+}
+
+.today-weather-overview .card-header {
+  @apply flex flex-col text-center md:text-left;
+  @apply gap-2;
+}
+
+.today-weather-overview .card-label {
+  @apply text-(--white-color);
+  @apply font-bold;
+  @apply text-2xl;
+}
+
+.today-weather-overview .card-date {
+  @apply text-(--neutral-200);
+  @apply font-normal;
+  @apply text-sm;
+}
+
+.today-weather-overview .card-body {
+}
+
+.today-weather-overview .card-weather-icon {
+  @apply w-25 h-25;
+}
+.today-weather-overview .card-weather-icon-temp {
+  @apply flex items-center justify-center md:justify-end gap-3 md:gap-4 lg:gap-6;
+  @apply text-(--white-color);
+  @apply text-6xl;
+  @apply font-bold;
+}
+
+.today-weather-details-card {
+  @apply min-h-10;
+  @apply flex flex-col;
+  @apply gap-2 md:gap-3 lg:gap-4;
+}
+
+.daily-forecast-card {
+  @apply min-h-45;
+  @apply p-3;
+  @apply flex flex-col justify-evenly;
+  @apply gap-2 md:gap-3 lg:gap-4;
+}
+
+.daily-forecast-card-header {
+  @apply text-xl text-center;
+}
+
+.daily-forecast-card-body {
+  @apply flex flex-col items-center justify-center;
+}
+
+.daily-forecast-card-weather-icon {
+  @apply w-16 h-16;
+}
+
+.daily-forecast-card-footer {
+  @apply flex items-center justify-between;
+}
+
+.daily-forecast-card-temp {
+  @apply text-(--white-color);
+  @apply font-medium;
+}
+
+/* //? .left-side children styles ends */
+
+/* //? .right-side children styles starts */
+.hourly-forecast-section {
+  @apply flex flex-col;
+  @apply gap-3 md:gap-4 lg:gap-6;
+  @apply h-full md:max-h-172.5;
+}
+
+.hourly-forecast-card {
+  @apply flex flex-col;
+  @apply gap-3 md:gap-4 lg:gap-6;
+  @apply h-full;
+}
+
+.hourly-forecast-header {
+  @apply flex items-center justify-between;
+}
+
+.hourly-forecast-body {
+  @apply flex-1;
+  @apply overflow-y-auto;
+  @apply grid grid-cols-1 gap-3;
+}
+
+.hourly-forecast-item-card {
+  @apply w-full min-h-12;
+  @apply px-2 py-1 pr-4;
+  @apply bg-(--neutral-800) border border-(--neutral-600);
+  @apply flex items-center justify-between;
+  @apply rounded-xl;
+}
+
+.hourly-forecast-item-card-left {
+  @apply flex items-center justify-center;
+  @apply gap-1;
+}
+
+.hourly-forecast-card-weather-icon {
+  @apply w-12 h-12;
+}
+
+/* //? .right-side children styles ends */
+
+.search-bar-container {
+  @apply w-full;
+  @apply flex flex-col md:flex-row items-center md:justify-center;
+  @apply gap-3 md:gap-6;
+}
+
+.search-bar {
+  @apply relative;
+  @apply w-full md:max-w-md lg:max-w-lg;
+}
+
+.search-bar-input {
+  @apply w-full;
+  @apply bg-(--neutral-800) text-(--white-color);
+  @apply placeholder-(--neutral-300);
+  @apply pl-10 pr-3 py-2;
+  @apply rounded-md;
+  @apply outline-none focus:ring-offset-1 focus:ring-1 focus:ring-(--white-color);
+  @apply font-medium;
+  @apply text-base;
+}
+
+.search-icon {
+  @apply cursor-pointer;
+  @apply absolute;
+  @apply left-3 top-1/2;
+  @apply transform -translate-y-1/2;
+}
+
+.suggestions-list {
+  @apply absolute;
+  @apply top-12 left-0;
+  @apply w-full;
+  @apply p-2;
+  @apply flex flex-col;
+  @apply bg-(--neutral-800) border border-(--neutral-700);
+  @apply rounded-md;
+  @apply transition-transform duration-300;
+  @apply z-10;
+}
+
+.suggestion {
+  @apply cursor-pointer;
+  @apply px-2 py-2;
+  @apply text-(--white-color);
+  @apply hover:bg-(--neutral-700);
+  @apply rounded-md;
+}
+
+.btn {
+  @apply w-full md:w-auto;
+  @apply cursor-pointer;
+  @apply px-4 py-2;
+  @apply bg-(--blue-700);
+  @apply text-(--white-color);
+  @apply rounded-md;
+}
+
+.dropdown-container {
+  @apply relative;
+}
+
+.dropdown-btn {
+  @apply relative;
+  @apply cursor-pointer;
+  @apply w-full;
+  @apply flex items-center justify-between;
+  @apply gap-2;
+  @apply px-3 py-2;
+  @apply bg-(--neutral-700);
+  @apply hover:bg-(--neutral-600) focus:ring-offset-1 focus:ring-1 focus:ring-(--white-color);
+  @apply rounded-md;
+}
+
+.dropdown-select-options {
+  @apply absolute top-12 right-0;
+  @apply w-50;
+  @apply px-1.5 py-1;
+  @apply flex flex-col;
+  @apply bg-(--neutral-800) border border-(--neutral-600);
+  @apply rounded-md;
+  @apply transition-transform duration-300;
+  @apply z-10;
+}
+
+.dropdown-title {
+  @apply mb-2;
+  @apply font-medium;
+}
+
+.dropdown-item {
+  @apply flex flex-col gap-1;
+}
+
+.dropdown-item:not(:last-child) {
+  @apply border-b border-(--neutral-600);
+  @apply pb-1 mb-1;
+}
+
+.dropdown-option-label {
+  @apply my-1 px-2;
+  @apply text-(--neutral-300) font-medium;
+  @apply text-sm;
+}
+
+.dropdown-option {
+  @apply cursor-pointer;
+  @apply px-2 py-2;
+  @apply flex items-center justify-between;
+  @apply text-(--white-color);
+  @apply hover:bg-(--neutral-700);
+  @apply rounded-md;
+}
+
+.dropdown-option.selected {
+  @apply bg-(--neutral-700);
+}
+
+.dropdown-icon {
+  @apply transition-transform duration-300;
+}
+
+.dropdown-icon.rotated {
+  @apply transform rotate-180;
+}
+
+.loading-container {
+  @apply w-full h-full;
+  @apply flex justify-center items-center;
+  @apply flex-col gap-2;
+}
+
+.loading-circle {
+  @apply w-4 h-4;
+  @apply rounded-full bg-white;
+  @apply animate-pulse;
+}
+
+.error-container {
+  @apply w-full h-full;
+  @apply flex;
+  @apply justify-center items-center;
+}
+
+.error-body {
+  @apply w-fit;
+  @apply flex flex-col gap-4;
+  @apply justify-center items-center;
+  @apply text-center;
+}
+
+.error-description {
+  @apply sm:w-110;
+}
+
+.retry-btn {
+  @apply w-fit flex items-center gap-3;
+  @apply bg-(--neutral-700) hover:bg-(--neutral-600);
+}
+
+.search-loading-container {
+  @apply flex flex-row justify-start;
+  @apply p-1;
+}
