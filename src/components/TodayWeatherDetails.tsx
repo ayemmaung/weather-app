@@ -11,8 +11,8 @@ const TodayWeatherDetails = () => {
       {DETAILS_CARDS.map((detail) => {
         const { id } = detail;
         const KEY = WEATHER_KEYS_MAPPING[id];
-        let value = "";
-        let unit = "";
+        let value: number;
+        let unit: string;
 
         if (weatherData) {
           const { current, current_units } = weatherData;

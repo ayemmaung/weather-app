@@ -11,7 +11,10 @@
     },
     "module": "esnext",
     "moduleResolution": "Node",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"]
 }
