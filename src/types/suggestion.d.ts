@@ -1,5 +1,9 @@
+import { MouseEventHandler } from "react";
+
 export type SuggestionListProps = {
+  selectedIndex?: number | string;
   hideSuggestions: Function;
+  updateSelectedIndex: Function;
 };
 
 export type SuggestionItemProps = {
@@ -9,5 +13,7 @@ export type SuggestionItemProps = {
   longitude: number;
   country_code: string;
   country: string;
+  isSelected?: boolean;
   hideSuggestions: Function;
+  updateSelectedIndex: MouseEventHandler;
 };

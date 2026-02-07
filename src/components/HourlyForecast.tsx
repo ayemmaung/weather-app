@@ -1,7 +1,24 @@
 import { HourlyForecastItem } from "@/types/weather";
 import HourlyForecastCard from "./WeatherCard/HourlyForecastCard";
+import { useWeatherContext } from "@/context/useWeatherContext";
+import { groupHourlyByDay } from "@/utils/formatingData";
 
-const HourlyForecast = ({ hourlyForecast }) => {
+const HourlyForecast = () => {
+  const { selectedDay, weatherData, timeZone } = useWeatherContext();
+
+  let hourlyForecast: HourlyForecastItem[] = [];
+
+  if (weatherData) {
+    const { hourly = null } = weatherData;
+
+    const groupedHourly = groupHourlyByDay({ hourly, timeZone }) || {};
+
+    if (selectedDay) {
+      hourlyForecast = groupedHourly[selectedDay.value];
+    }
+    console.log("groupedHourly: ", groupedHourly);
+  }
+
   return (
     <div className="hourly-forecast-body">
       {!hourlyForecast

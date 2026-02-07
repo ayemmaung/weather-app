@@ -3,15 +3,17 @@ import SearchIcon from "@assets/images/icon-search.svg";
 import Button from "./Button";
 import SuggestionList from "@/components/SuggestionList";
 import { useSearchContext } from "@/context/useSearchContext";
+import { useWeatherContext } from "@/context/useWeatherContext";
 
 type SearchBarProps = {
   placeholder?: string;
 };
 
 const SearchBar = ({ placeholder }: SearchBarProps) => {
-  const { searchCity } = useSearchContext();
+  const { setLocation } = useWeatherContext();
+  const { query, results, searchCity } = useSearchContext();
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [query, setQuery] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const focusInput = () => {
     const inputElement = document.querySelector(
@@ -24,25 +26,53 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setQuery(value);
-    setShowSuggestions(false);
+    searchCity(value);
+    setShowSuggestions(value.trim().length > 1);
+    setSelectedIndex(null);
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearchOnClick();
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex((prev) =>
+          prev === null || prev === results.length - 1 ? 0 : prev + 1,
+        );
+        break;
+
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedIndex((prev) =>
+          prev === null || prev === 0 ? results.length - 1 : prev - 1,
+        );
+        break;
+
+      case "Enter":
+        e.preventDefault();
+        handleSearchOnClick();
+        break;
     }
   };
 
   const handleSearchOnClick = () => {
-    if (query && query.length > 1) {
-      searchCity(query);
-      setShowSuggestions(true);
+    let selectedItem = results[0];
+    if (selectedIndex !== null && results[selectedIndex]) {
+      selectedItem = results[selectedIndex];
+    }
+
+    if (selectedItem) {
+      setLocation(selectedItem);
+      setShowSuggestions(false);
     }
   };
 
   const hideSuggestions = () => {
     setShowSuggestions(false);
+    setSelectedIndex(null);
+  };
+
+  const updateSelectedIndex = (index: number) => {
+    setSelectedIndex(index);
   };
 
   return (
@@ -58,13 +88,18 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
         <input
           type="text"
           className="search-bar-input"
+          value={query}
           placeholder={placeholder}
           onChange={handleInputChange}
           onKeyDown={handleInputKeyDown}
         />
 
         {showSuggestions && (
-          <SuggestionList hideSuggestions={hideSuggestions} />
+          <SuggestionList
+            hideSuggestions={hideSuggestions}
+            selectedIndex={selectedIndex}
+            updateSelectedIndex={updateSelectedIndex}
+          />
         )}
       </div>
       <Button

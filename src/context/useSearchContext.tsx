@@ -1,6 +1,6 @@
 import { searchCityData } from "@/services/search";
 import { SearchContextProviderProps, SearchContextType } from "@/types/search";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
@@ -19,31 +19,57 @@ export const useSearchContext = () => {
 export const SearchContextProvider = ({
   children,
 }: SearchContextProviderProps) => {
+  const [results, setResults] = useState([]);
+  const [query, setQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [results, setResults] = useState([]);
+
+  const controllerRef = useRef<AbortController | null>(null);
+  const lastQueryRef = useRef("");
 
   const searchCity = async (query: string) => {
-    if (!query) return;
+    setQuery(query);
 
-    setLoading(true);
-    setError(false);
+    if (!query.trim()) {
+      setResults([]);
+      setLoading(false);
+      setError(false);
+      return;
+    }
+
+    controllerRef.current?.abort();
+
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    lastQueryRef.current = query;
 
     try {
-      const data = await searchCityData(query);
+      setLoading(true);
+      setError(false);
+
+      const data = await searchCityData(query, controller.signal);
+
+      if (lastQueryRef.current !== query) return;
 
       console.log("data==>", data);
-      setResults(data.results);
+      setResults(data.results ?? []);
       setLoading(false);
-    } catch (error) {
+    } catch (err) {
+      if (err.code !== "ERR_CANCELED") {
+        setError(true);
+      }
+    } finally {
       setLoading(false);
-      setError(true);
     }
   };
 
   const value = {
     loading,
     error,
+    query,
     results,
     searchCity,
   };

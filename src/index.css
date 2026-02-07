@@ -286,6 +286,10 @@ main {
   @apply rounded-md;
 }
 
+.suggestion.highlight {
+  @apply bg-(--neutral-700);
+}
+
 .btn {
   @apply w-full md:w-auto;
   @apply cursor-pointer;
@@ -369,8 +373,11 @@ main {
   @apply flex-col gap-2;
 }
 
+.loading-icon {
+  @apply animate-spin;
+}
+
 .loading-circle {
-  @apply w-4 h-4;
   @apply rounded-full bg-white;
   @apply animate-pulse;
 }

@@ -3,6 +3,7 @@ import axios from "axios";
 
 export const searchCityData = async (
   query: string,
+  signal?: AbortSignal,
 ): Promise<SearchResponse> => {
   const base = import.meta.env.VITE_GEOCODING_URL;
   const params = new URLSearchParams({
@@ -10,7 +11,6 @@ export const searchCityData = async (
     count: "4",
   });
 
-  const url = `${base}?${params.toString()}`;
-  const { data } = await axios.get<SearchResponse>(url);
+  const { data } = await axios.get<SearchResponse>(base, { params, signal });
   return data;
 };

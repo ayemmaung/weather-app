@@ -16,16 +16,17 @@ export const fetchWeatherData = async (
     hourly: "temperature_2m,weather_code",
     daily: "weather_code,temperature_2m_max,temperature_2m_min",
   });
-  if (units.unit === "imperial") {
+
+  if (units?.unit === "imperial") {
     params.set("wind_speed_unit", "mph");
     params.set("temperature_unit", "fahrenheit");
     params.set("precipitation_unit", "inch");
   }
 
-  if (units.wind === "imperial") params.set("wind_speed_unit", "mph");
-  if (units.temperature === "imperial")
+  if (units?.wind === "imperial") params.set("wind_speed_unit", "mph");
+  if (units?.temperature === "imperial")
     params.set("temperature_unit", "fahrenheit");
-  if (units.precipitation === "imperial")
+  if (units?.precipitation === "imperial")
     params.set("precipitation_unit", "inch");
 
   const url = `${base}?${params.toString()}`;

@@ -1,30 +1,51 @@
 type LoadingProps = {
   className?: string;
   icon?: string;
+  size?: "sm" | "md" | "lg";
   placeholder?: string;
 };
 
-const Loading = ({ icon, placeholder, className }: LoadingProps) => {
+const iconSize = {
+  sm: 15,
+  md: 30,
+  lg: 50,
+};
+
+const Loading = ({ icon, size, placeholder, className }: LoadingProps) => {
+  const loadingCircleWidth = size ? iconSize[size] + "px" : "15px";
+  const loadingCircleStyle = {
+    width: loadingCircleWidth,
+    height: loadingCircleWidth,
+  };
+
   return (
-    <div className={`loading-container ${className}`}>
+    <div className={`loading-container ${className ? className : ""}`}>
       {icon ? (
         <img
-          width={15}
+          width={size ? iconSize[size] : 15}
           src={icon}
           alt="loading Icon"
           className="loading-icon"
         />
       ) : (
         <div className="flex gap-2">
-          <div className="loading-circle" style={{ animationDelay: "50ms" }} />
-          <div
-            className="loading-circle -translate-y-1"
-            style={{ animationDelay: "150ms" }}
-          />
-          <div className="loading-circle" style={{ animationDelay: "250ms" }} />
+          {Array.from({ length: 3 }).map((_, index) => {
+            const delayTime = 50 * (index + 1);
+            return (
+              <div
+                className="loading-circle"
+                style={{
+                  animationDelay: `${delayTime}ms`,
+                  ...loadingCircleStyle,
+                }}
+              />
+            );
+          })}
         </div>
       )}
-      {placeholder || "Loading..."}
+      <p className={size ? `text-${size}` : "text-sm"}>
+        {placeholder || "Loading..."}
+      </p>
     </div>
   );
 };

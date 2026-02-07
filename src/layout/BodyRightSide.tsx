@@ -19,21 +19,7 @@ const DAYS_OPTIONS = [
 ];
 
 const BodyRightSide = () => {
-  const { weatherData, timeZone, selectedDay, toggleSelectedDay } =
-    useWeatherContext();
-
-  let hourlyForecast = null;
-
-  if (weatherData) {
-    const { hourly = null } = weatherData;
-
-    const groupedHourly = groupHourlyByDay({ hourly, timeZone }) || {};
-
-    if (selectedDay) {
-      hourlyForecast = groupedHourly[selectedDay.value];
-    }
-    console.log("groupedHourly: ", groupedHourly);
-  }
+  const { selectedDay, toggleSelectedDay } = useWeatherContext();
 
   return (
     <div className="right-side">
@@ -50,7 +36,7 @@ const BodyRightSide = () => {
               onChange={toggleSelectedDay}
             />
           </div>
-          <HourlyForecast hourlyForecast={hourlyForecast} />
+          <HourlyForecast />
         </Card>
       </div>
     </div>

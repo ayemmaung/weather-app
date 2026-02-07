@@ -49,11 +49,13 @@ Users should be able to:
 
 ### Continued development
 
-- add loading animation to SearchBar's Suggestion loading
-- add initial loading when the site is loading
-- show loading after user clicked on the suggestion item
-- show error when the connection lost during fetching weather data
-- auto retry for like 3 times(about 15 sec) before showing error
+- add loading animation to SearchBar's Suggestion loading ✅
+- add initial loading when the site is loading ✅
+- show loading after user clicked on the suggestion item ✅
+- show error when the connection lost during fetching weather data ✅
+- auto retry before showing error ✅
+- update searchbar to search and show suggstions on input change ✅
+- update suggestion list to support up/down arrow selecting ✅
 
 ## Author
 

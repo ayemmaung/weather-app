@@ -23,7 +23,9 @@ export interface OpenMeteoResponse {
 }
 
 export type WeatherContextType = {
+  initialLoading?: boolean;
   loading?: boolean;
+  retrying?: boolean;
   error?: boolean;
   location?: Location;
   weatherData?: WeatherDataType;

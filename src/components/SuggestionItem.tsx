@@ -1,17 +1,24 @@
 import { useWeatherContext } from "@/context/useWeatherContext";
 import { SuggestionItemProps } from "@/types/suggestion";
 
-const SuggestionItem = (props: SuggestionItemProps) => {
+const SuggestionItem = ({
+  isSelected,
+  hideSuggestions,
+  updateSelectedIndex,
+  ...props
+}: SuggestionItemProps) => {
   const { setLocation } = useWeatherContext();
+  const { name } = props;
   return (
     <li
-      className="suggestion"
+      className={`suggestion ${isSelected ? "highlight" : ""}`}
+      onMouseEnter={updateSelectedIndex}
       onClick={() => {
-        props.hideSuggestions();
+        hideSuggestions();
         setLocation(props);
       }}
     >
-      {props.name}
+      {name}
     </li>
   );
 };

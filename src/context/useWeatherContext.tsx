@@ -41,8 +41,13 @@ export const WeatherContextProvider = ({
   });
   const [selectedDay, setSelectedDay] = useState(null);
 
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [retrying, setRetrying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const toggleSelectedDay = (dayItem: { label: string; value: string }) => {
     if (dayItem) {
@@ -64,19 +69,6 @@ export const WeatherContextProvider = ({
     }
   };
 
-  useEffect(() => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const currentDay = formatDateWithTimezone({
-      isoString: new Date().toISOString(),
-      timeZone: userTimeZone,
-      options: {
-        weekday: "long",
-      },
-    });
-    setSelectedDay({ label: currentDay, value: currentDay.toLowerCase() });
-    setTimeZone(userTimeZone);
-  }, []);
-
   // wrapper around the weather service to manage local state
   const fetchWeatherData = async (
     loc: Location,
@@ -84,23 +76,70 @@ export const WeatherContextProvider = ({
     signal?: AbortSignal,
   ) => {
     if (!loc?.latitude || !loc?.longitude) return;
+
     setLoading(true);
     setError(false);
-    try {
-      const data = await fetchWeatherService(loc, units, signal);
-      console.log("data==>", data);
-      setWeatherData(data);
-      setLoading(false);
-    } catch (err) {
-      // ignore abort errors
-      const isAbort =
-        (err as any)?.name === "CanceledError" ||
-        (err as any)?.code === "ERR_CANCELED" ||
-        (err as any)?.message === "canceled";
-      if (isAbort) return;
-      setLoading(false);
-      setError(true);
-      console.error("fetchWeatherData error:", err);
+
+    const MAX_RETRIES = 3;
+    let attempt = 0;
+
+    while (attempt <= MAX_RETRIES) {
+      try {
+        const data = await fetchWeatherService(loc, units, signal);
+        console.log("data==>", data);
+        setWeatherData(data);
+        setLoading(false);
+        setRetrying(false);
+        return;
+      } catch (err) {
+        const isAbort =
+          (err as any)?.name === "CanceledError" ||
+          (err as any)?.code === "ERR_CANCELED" ||
+          (err as any)?.message === "canceled";
+
+        const status = (err as any)?.response?.status;
+        const shouldRetry = !status || status >= 500;
+
+        // ignore abort errors
+        if (isAbort) {
+          setLoading(false);
+          setRetrying(false);
+          return;
+        }
+
+        if (!shouldRetry) {
+          setLoading(false);
+          setError(true);
+          return;
+        }
+
+        if (attempt === MAX_RETRIES) {
+          setLoading(false);
+          setError(true);
+          setRetrying(false);
+          console.error("Final weather fetch error:", err);
+          return;
+        }
+
+        attempt++;
+        setRetrying(true);
+
+        // exponential backoff delay
+        const delay = 500 * Math.pow(2, attempt);
+
+        try {
+          await Promise.race([
+            sleep(delay),
+            new Promise((_, reject) =>
+              signal?.addEventListener("abort", () => reject("aborted")),
+            ),
+          ]);
+        } catch {
+          setLoading(false);
+          setRetrying(false);
+          return;
+        }
+      }
     }
   };
 
@@ -112,9 +151,28 @@ export const WeatherContextProvider = ({
     return () => controller.abort();
   }, [location, units]);
 
+  useEffect(() => {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const currentDay = formatDateWithTimezone({
+      isoString: new Date().toISOString(),
+      timeZone: userTimeZone,
+      options: {
+        weekday: "long",
+      },
+    });
+    setSelectedDay({ label: currentDay, value: currentDay.toLowerCase() });
+    setTimeZone(userTimeZone);
+
+    const initialLoadingTimer = setTimeout(() => setInitialLoading(false), 500);
+
+    return () => clearTimeout(initialLoadingTimer);
+  }, []);
+
   const value = {
+    initialLoading,
     loading,
     error,
+    retrying,
     location,
     weatherData,
     timeZone,

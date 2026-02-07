@@ -1,6 +1,7 @@
 export interface SearchContextType {
   loading?: boolean;
   error?: boolean;
+  query?: string;
   results?: SearchResult[];
   searchCity?: Function;
 }
